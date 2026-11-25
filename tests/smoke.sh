@@ -25,7 +25,7 @@ check() {
   mode=--headless
   [ "$editor" = vim ] && mode=-es
   : > "$tmp/log"
-  REX_SESSION=session:test REX_BLOCK=block:editor REX_LOG="$tmp/log" REX_DEAD="$tmp/dead" PATH="$tmp:$PATH" "$editor" --clean "$mode" --cmd "set rtp^=$repo" \
+  REX_BLOCK=block:editor REX_LOG="$tmp/log" REX_DEAD="$tmp/dead" PATH="$tmp:$PATH" "$editor" --clean "$mode" --cmd "set rtp^=$repo" \
     '+runtime plugin/vim-test-rex.vim' \
     '+call assert_equal(1, exists("*RexStrategy")) | call assert_equal(2, exists(":RexCloseRunner")) | call assert_true(has_key(g:test#custom_strategies, "rex"))' \
     '+call call(g:test#custom_strategies.rex, ["true"]) | call call(g:test#custom_strategies.rex, ["true"])' \
@@ -33,10 +33,10 @@ check() {
     '+if len(v:errors) | cquit | endif' +qa
   # split, send; send; failed send, split, send with clear; close
   test "$(wc -l < "$tmp/log" | tr -d ' ')" = 7
-  test "$(grep -c '^-s session:test split -b block:editor --split=below' "$tmp/log")" = 2
-  test "$(grep -c '^-s session:test send -b block:runner true|$' "$tmp/log")" = 2
-  test "$(grep -c '^-s session:test send -b block:runner clear|true|$' "$tmp/log")" = 2
-  grep -q '^-s session:test block close block:runner$' "$tmp/log"
+  test "$(grep -c '^-s block:editor split -b block:editor --split=below' "$tmp/log")" = 2
+  test "$(grep -c '^-s block:editor send -b block:runner true|$' "$tmp/log")" = 2
+  test "$(grep -c '^-s block:editor send -b block:runner clear|true|$' "$tmp/log")" = 2
+  grep -q '^-s block:editor block close block:runner$' "$tmp/log"
 }
 
 check nvim

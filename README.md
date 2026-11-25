@@ -2,7 +2,7 @@
 
 A [vim-test](https://github.com/vim-test/vim-test) strategy that runs tests in a [Rex](https://rex.superlogical.com) pane.
 
-Requires Vim or Neovim, the `rex` CLI, and an editor running inside Rex (`REX_SESSION` and `REX_BLOCK` set). The fallback examples below also check `TMUX`, because a tmux server started from a Rex pane keeps that pane's `REX_*` variables, and every tmux pane inherits them.
+Requires Vim or Neovim, the `rex` CLI, and an editor running inside Rex (`REX_BLOCK` set). The fallback examples below also check `TMUX`, because a tmux server started from a Rex pane keeps that pane's `REX_*` variables, and every tmux pane inherits them.
 
 The first run splits a pane below the editor, in the editor's working directory, without moving focus. Later runs reuse that pane, and a new one is created if it was closed.
 
@@ -51,13 +51,13 @@ For Neovim with LazyVim:
     {
       "<leader>tc",
       function()
-        vim.cmd(vim.env.REX_SESSION and not vim.env.TMUX and "RexCloseRunner" or "VimuxCloseRunner")
+        vim.cmd(vim.env.REX_BLOCK and not vim.env.TMUX and "RexCloseRunner" or "VimuxCloseRunner")
       end,
       desc = "Close test runner pane",
     },
   },
   config = function()
-    vim.g["test#strategy"] = vim.env.REX_SESSION and not vim.env.TMUX and "rex" or "vimux"
+    vim.g["test#strategy"] = vim.env.REX_BLOCK and not vim.env.TMUX and "rex" or "vimux"
   end,
 }
 ```
@@ -65,7 +65,7 @@ For Neovim with LazyVim:
 For Vim:
 
 ```vim
-if !empty($REX_SESSION) && empty($TMUX)
+if !empty($REX_BLOCK) && empty($TMUX)
   let g:test#strategy = 'rex'
   nnoremap <leader>tc :RexCloseRunner<CR>
 else

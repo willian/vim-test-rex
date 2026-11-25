@@ -6,7 +6,7 @@ let g:loaded_vim_test_rex = 1
 let s:block_id = ''
 
 function! s:rex(args) abort
-  let l:output = system(join(map(['rex', '-s', $REX_SESSION] + a:args, 'shellescape(v:val)')))
+  let l:output = system(join(map(['rex', '-s', $REX_BLOCK] + a:args, 'shellescape(v:val)')))
   return [l:output, v:shell_error]
 endfunction
 
@@ -33,8 +33,8 @@ function! s:split() abort
 endfunction
 
 function! RexStrategy(cmd) abort
-  if empty($REX_SESSION) || empty($REX_BLOCK)
-    call s:error('REX_SESSION and REX_BLOCK are not set')
+  if empty($REX_BLOCK)
+    call s:error('REX_BLOCK is not set')
     return
   endif
 
